@@ -1,12 +1,9 @@
-import CarRepair from './CarRepair.js';
+import CarRepairServise from '../services/CarRepairServise.js';
 
-import PostService from './PostService.js';
-
-class PostController {
+class CarRepairController {
   async create(req, res) {
     try {
-      // console.log(req.body);
-      const post = await PostService.create(req.body);
+      const post = await CarRepairServise.create(req.body);
       res.json(post);
     } catch (e) {
       res.status(500).json(e);
@@ -14,7 +11,7 @@ class PostController {
   }
   async getAll(req, res) {
     try {
-      const posts = await PostService.getAll(); //возвращает все посты из базы данных
+      const posts = await CarRepairServise.getAll(); //возвращает все посты из базы данных
       return res.json(posts);
     } catch (e) {
       res.status(500).json(e);
@@ -22,7 +19,7 @@ class PostController {
   }
   async getOne(req, res) {
     try {
-      const post = await PostService.getOne(req.params.id);
+      const post = await CarRepairServise.getOne(req.params.id);
       return res.json(post);
     } catch (e) {
       res.status(500).json(e);
@@ -30,7 +27,7 @@ class PostController {
   }
   async update(req, res) {
     try {
-      const updatedPost = await PostService.update(req.body);
+      const updatedPost = await CarRepairServise.update(req.body);
       return res.json(updatedPost);
     } catch (e) {
       res.status(500).json(e.message);
@@ -38,7 +35,7 @@ class PostController {
   }
   async delete(req, res) {
     try {
-      const deletePost = await PostService.delete(req.params.id);
+      const deletePost = await CarRepairServise.delete(req.params.id);
       return res.json(deletePost);
     } catch (e) {
       res.status(500).json(e.message);
@@ -46,4 +43,4 @@ class PostController {
   }
 }
 
-export default new PostController();
+export default new CarRepairController();
