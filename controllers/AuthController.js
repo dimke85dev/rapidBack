@@ -9,8 +9,25 @@ class AuthController {
       const { username, password } = req.body;
 
       const isUsed = await UserModel.findOne({ username }); //findOne - поиск по конкретному свойству(полю)
+
+      if (!username && !password) {
+        return res.status(401).json({
+          message: `Поля повинныі бути заповнені`,
+          messageType: 'err',
+        });
+      }
+
       if (isUsed) {
-        return res.status(402).json({ message: `${username}  уже существует` });
+        return res
+          .status(402)
+          .json({ message: `${username}  вже існує`, messageType: 'err' });
+      }
+
+      if (!password) {
+        return res.status(403).json({
+          message: `Поля повинныі бути заповнені`,
+          messageType: 'err',
+        });
       }
 
       const salt = bcrypt.genSaltSync(10); //сложность пароля
@@ -22,15 +39,29 @@ class AuthController {
         password: hash, //записываем вместо пароля уже хешированный пароль
         group: 'user',
       }); //создаем новый обьект Пользователя модели  который будет экземпляром UserModel
-
-      await UserModel.create(newUser); //сохраняе нового пользователя в базу данных
+      //Создаем токен
+      const token = jwt.sign(
+        {
+          id: newUser._id,
+        },
+        process.env.JWT_SECRET,
+        { expiresIn: '30d' }
+      );
+      ///////////////////
+      newUser.save();
+      // await UserModel.create(newUser); //сохраняе нового пользователя в базу данных
       res.json({
         //отправляем на фронт обьект Пользователя и сообщение о успешной регистрации
+        token,
         newUser,
-        message: `Регистрация прошла успешно`,
+        message: `Реєстрація пройшла успішно`,
+        messageType: 'ok',
       });
     } catch (error) {
-      res.json({ message: 'Ошибка при создании пользователя' });
+      res.json({
+        message: 'Помилка при створенні користувача',
+        messageType: 'err',
+      });
     }
   }
 
@@ -41,13 +72,33 @@ class AuthController {
       const { username, password } = req.body;
       const user = await UserModel.findOne({ username });
 
-      if (!user) {
-        return res.status(402).json({ message: `${username}  не существует` });
+      ////////
+      if (!username && !password) {
+        return res.status(404).json({
+          message: `Поле Login повинныо бути заповнене`,
+          messageType: 'err',
+        });
       }
+
+      if (!user) {
+        return res.status(405).json({
+          message: `Такого користувача ${username}  не існує`,
+          messageType: 'err',
+        });
+      }
+
+      if (!password) {
+        return res.status(406).json({
+          message: `Поле пароль повинно бути заповнене`,
+          messageType: 'err',
+        });
+      }
+      ///////////
+
       const isPasswordCorrect = await bcrypt.compare(password, user.password);
 
       if (!isPasswordCorrect) {
-        return res.json({ message: 'Password incorrect' });
+        return res.json({ message: 'Не вірний пароль', messageType: 'err' });
       }
 
       // res.json({ message: 'gfasdhfasdfkasdgjkgfadg' });
@@ -65,10 +116,14 @@ class AuthController {
       res.json({
         token,
         user,
-        message: 'Вы вошли в систему',
+        message: 'Ви увійшли в систему',
+        messageType: 'ok',
       });
     } catch (error) {
-      res.json({ message: 'Ошибка при авторизации пользователя' });
+      res.json({
+        message: 'Ошибка при авторизации пользователя',
+        messageType: 'err',
+      });
     }
   }
 
@@ -78,7 +133,9 @@ class AuthController {
     try {
       const user = await UserModel.findById(req.userID);
       if (!user) {
-        return res.status(402).json({ message: `${username}  не существует` });
+        return res
+          .status(402)
+          .json({ message: `${username}  не существует`, messageType: 'err' });
       }
       const token = jwt.sign(
         {
@@ -93,7 +150,7 @@ class AuthController {
         token,
       });
     } catch (error) {
-      res.json({ message: 'Нет доступа' });
+      res.json({ message: 'Нет доступа', messageType: 'err' });
     }
   }
 }
