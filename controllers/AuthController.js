@@ -70,7 +70,9 @@ class AuthController {
   async login(req, res) {
     try {
       const { username, password } = req.body;
-      const user = await UserModel.findOne({ username });
+      const user = await UserModel.findOne({
+        username: username.toLowerCase(),
+      });
 
       ////////
       if (!username && !password) {
