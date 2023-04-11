@@ -17,6 +17,7 @@ const DB_NAME = process.env.DB_NAME;
 
 // const DB_URL = `mongodb+srv://${DB_USER}:${DB_PASSWORD}@cluster0.jfnk8z0.mongodb.net/${DB_NAME}?retryWrites=true&w=majority`;
 const DB_URL = `mongodb+srv://${DB_USER}:${DB_PASSWORD}@rapidservice.aipbrq8.mongodb.net/${DB_NAME}?retryWrites=true&w=majority`;
+// const DB_URL = `mongodb+srv://${DB_USER}:${DB_PASSWORD}@rapidservice.vdzydez.mongodb.net/${DB_NAME}?retryWrites=true&w=majority`;
 
 const app = express();
 
