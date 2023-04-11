@@ -35,7 +35,7 @@ class AuthController {
       const hash = bcrypt.hashSync(password, salt); //хеширование пароля
 
       const newUser = new UserModel({
-        username,
+        username: username.toLowerCase(),
         password: hash, //записываем вместо пароля уже хешированный пароль
         group: 'user',
       }); //создаем новый обьект Пользователя модели  который будет экземпляром UserModel
