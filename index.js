@@ -21,16 +21,13 @@ const DB_URL = `mongodb+srv://${DB_USER}:${DB_PASSWORD}@rapidservice.aipbrq8.mon
 const app = express();
 
 //Middleware
+
 app.use(cors());
 app.use(express.json());
 app.use(express.static('static'));
 app.use(fileUpload({}));
 app.use('/api', carRepairRouter);
 app.use('/api/auth', authRouter);
-
-// app.get('/', (req, res) => {
-//   res.json({ message: 'ALL if fine. ' });
-// });
 
 async function startApp() {
   try {
