@@ -5,6 +5,7 @@ import fileUpload from 'express-fileupload';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import authRouter from './routes/authRouter.js';
+import postRouter from './routes/postRouter.js';
 
 dotenv.config();
 
@@ -25,10 +26,13 @@ const app = express();
 
 app.use(cors());
 app.use(express.json());
-app.use(express.static('static'));
+app.use(express.static('uploads'));
 app.use(fileUpload({}));
+
+//Routes
 app.use('/api', carRepairRouter);
 app.use('/api/auth', authRouter);
+app.use('/api/posts', postRouter);
 
 async function startApp() {
   try {

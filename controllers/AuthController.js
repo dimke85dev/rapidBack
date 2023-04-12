@@ -8,7 +8,9 @@ class AuthController {
     try {
       const { username, password } = req.body;
 
-      const isUsed = await UserModel.findOne({ username }); //findOne - поиск по конкретному свойству(полю)
+      const isUsed = await UserModel.findOne({
+        username: username.toLowerCase(),
+      }); //findOne - поиск по конкретному свойству(полю)
 
       if (!username && !password) {
         return res.status(401).json({

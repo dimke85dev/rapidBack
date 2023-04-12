@@ -17,6 +17,12 @@ const UserSchema = new mongoose.Schema(
         ref: 'CarUser',
       },
     ],
+    posts: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Post',
+      },
+    ],
     group: {
       type: String,
       // require: true,
