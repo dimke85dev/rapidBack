@@ -51,6 +51,29 @@ export const createPost = async (req, res) => {
     res.json(newPostWithoutImage);
   } catch (error) {
     console.log(5);
-    res.json({ message: 'Что-то пошло не так' + error.message });
+    res.json({
+      message:
+        'Щось пішло не так в PostController createPost function ' +
+        error.message,
+    });
+  }
+};
+
+// Get All Posts
+
+export const getAllPost = async (req, res) => {
+  try {
+    const posts = await Post.find().sort('-createdAt'); //находим все посты и сортируем по дате создания sort('createedAT')
+    const popularPosts = await Post.find().limit(5).sort('-views'); //находим все посты и выбираем 5 и сортируем по кол-ву просмотров sort('-views')
+    if (!posts) {
+      return res.json({ message: 'Статті відсутні' });
+    }
+    res.json({ posts, popularPosts });
+  } catch (error) {
+    res.json({
+      message:
+        'Щось пішло не так в PostController getAllPost function ' +
+        error.message,
+    });
   }
 };
