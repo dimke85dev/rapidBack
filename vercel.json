@@ -19,7 +19,7 @@
         { "key": "Access-Control-Allow-Credentials", "value": "true" },
         {
           "key": "Access-Control-Allow-Origin",
-          "value": "rapid-back.vercel.app"
+          "value": "localhost:3000"
         },
         {
           "key": "Access-Control-Allow-Methods",
