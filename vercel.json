@@ -19,7 +19,7 @@
         { "key": "Access-Control-Allow-Credentials", "value": "true" },
         {
           "key": "Access-Control-Allow-Origin",
-          "value": "https://rapid-front.vercel.app"
+          "value": "https://rapid-back.vercel.app/api/posts"
         },
         {
           "key": "Access-Control-Allow-Methods",
