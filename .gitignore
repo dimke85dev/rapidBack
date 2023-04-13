@@ -14,7 +14,7 @@
 /backend/build
 /clietFront/build
 /build
-*.jpg
+#*.jpg
 
 # misc
 .DS_Store
