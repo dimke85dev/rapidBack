@@ -1,4 +1,3 @@
-import multer from 'multer';
 import Post from '../models/Post.js';
 import UserModel from '../models/UserModel.js';
 import path, { dirname } from 'path';
@@ -6,14 +5,6 @@ import path, { dirname } from 'path';
 import { fileURLToPath } from 'url';
 
 //Create Post
-const storage = multer.diskStorage({
-  destination(req, file, cb) {
-    cb(null, 'uploads/');
-  },
-  filename(req, file, cb) {
-    cb(null, Date().toString + '-' + file.originalname);
-  },
-});
 
 export const createPost = async (req, res) => {
   try {
