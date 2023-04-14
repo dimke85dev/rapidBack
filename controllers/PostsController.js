@@ -14,6 +14,7 @@ export const createPost = async (req, res) => {
       let fileName = Date.now().toString() + req.files.image.name; //формируем имя для изображения
       const __dirname = dirname(fileURLToPath(import.meta.url)); //создаем переменную с текущем местоположением, т.е. путь
       req.files.image.mv(path.join(__dirname, '..', 'uploads', fileName)); // переносим полученный на фронтеend  файл  в папку uploads, выходя через две точки из текущей папки, и именуем как fileName
+      console.log(__dirname);
       // req.files.image.mv(path.resolve('', fileName));
       const newPostWithImage = new Post({
         username: user.username,
@@ -26,6 +27,7 @@ export const createPost = async (req, res) => {
       // console.log(newPostWithImage);
 
       await newPostWithImage.save(); //создали пост
+
       await UserModel.findByIdAndUpdate(req.userId, {
         //нашли юзера, которому этот пост принадлежит и добавили в его массив постов
         $push: { posts: newPostWithImage },

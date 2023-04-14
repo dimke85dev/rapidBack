@@ -6,6 +6,7 @@ import dotenv from 'dotenv';
 import cors from 'cors';
 import authRouter from './routes/authRouter.js';
 import postRouter from './routes/postRouter.js';
+import multer from 'multer';
 
 dotenv.config();
 
@@ -19,18 +20,15 @@ const DB_NAME = process.env.DB_NAME;
 // const DB_URL = `mongodb+srv://${DB_USER}:${DB_PASSWORD}@cluster0.jfnk8z0.mongodb.net/${DB_NAME}?retryWrites=true&w=majority`;
 const DB_URL = `mongodb+srv://${DB_USER}:${DB_PASSWORD}@rapidservice.aipbrq8.mongodb.net/${DB_NAME}?retryWrites=true&w=majority`;
 // const DB_URL = `mongodb+srv://${DB_USER}:${DB_PASSWORD}@rapidservice.vdzydez.mongodb.net/${DB_NAME}?retryWrites=true&w=majority`;
-
+// const multer = require('multer');
+// const upload = multer({ dest: 'uploads/' });
 const app = express();
 
 //Middleware
 
-app.use(
-  cors({
-    origin: ['https://rapid-front.vercel.app'],
-    credentials: true,
-  })
-);
+app.use(cors());
 app.use(express.json());
+
 app.use(express.static('uploads'));
 app.use(fileUpload({}));
 
