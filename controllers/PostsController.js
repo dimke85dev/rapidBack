@@ -14,7 +14,7 @@ export const createPost = async (req, res) => {
       let fileName = Date.now().toString() + req.files.image.name; //формируем имя для изображения
       const __dirname = dirname(fileURLToPath(import.meta.url)); //создаем переменную с текущем местоположением, т.е. путь
       req.files.image.mv(path.join(__dirname, '..', 'uploads', fileName)); // переносим полученный на фронтеend  файл  в папку uploads, выходя через две точки из текущей папки, и именуем как fileName
-      res.json(req.files.image);
+      // res.json(req.files.image);
       const newPostWithImage = new Post({
         username: user.username,
         title,
