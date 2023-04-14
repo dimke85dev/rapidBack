@@ -37,6 +37,16 @@ app.use('/api', carRepairRouter);
 app.use('/api/auth', authRouter);
 app.use('/api/posts', postRouter);
 
+app.use((req, res, next) => {
+  // Добавляем заголовки, которые нужны для всех запросов
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header(
+    'Access-Control-Allow-Headers',
+    'Origin, X-Requested-With, Content-Type, Accept'
+  );
+  next();
+});
+
 async function startApp() {
   try {
     await mongoose.connect(DB_URL);
