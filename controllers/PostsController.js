@@ -19,7 +19,7 @@ export const createPost = async (req, res) => {
       // res.json(req.files.image);
 
       const fileName = uuid.v4() + '.jpg';
-      const filePath = path.resolve('uploads', fileName);
+      const filePath = path.resolve('static', fileName);
       req.files.image.mv(filePath);
 
       const newPostWithImage = new Post({
