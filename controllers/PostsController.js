@@ -1,6 +1,7 @@
 import Post from '../models/Post.js';
 import UserModel from '../models/UserModel.js';
 import path, { dirname } from 'path';
+import * as uuid from 'uuid';
 // import * as path from 'path';
 import { fileURLToPath } from 'url';
 
@@ -12,10 +13,15 @@ export const createPost = async (req, res) => {
     const user = await UserModel.findById(req.userID);
     // console.log(req.userID);
     if (req.files) {
-      let fileName = Date.now().toString() + req.files.image.name; //формируем имя для изображения
-      const __dirname = dirname(fileURLToPath(import.meta.url)); //создаем переменную с текущем местоположением, т.е. путь
-      req.files.image.mv(path.join(__dirname, '..', 'uploads', fileName)); // переносим полученный на фронтеend  файл  в папку uploads, выходя через две точки из текущей папки, и именуем как fileName
+      // let fileName = Date.now().toString() + req.files.image.name; //формируем имя для изображения
+      // const __dirname = dirname(fileURLToPath(import.meta.url)); //создаем переменную с текущем местоположением, т.е. путь
+      // req.files.image.mv(path.join(__dirname, '..', 'uploads', fileName)); // переносим полученный на фронтеend  файл  в папку uploads, выходя через две точки из текущей папки, и именуем как fileName
       // res.json(req.files.image);
+
+      const fileName = uuid.v4() + '.jpg';
+      const filePath = path.resolve('uploads', fileName);
+      req.files.image.mv(filePath);
+
       const newPostWithImage = new Post({
         username: user.username,
         title,
@@ -32,7 +38,7 @@ export const createPost = async (req, res) => {
         //нашли юзера, которому этот пост принадлежит и добавили в его массив постов
         $push: { posts: newPostWithImage },
       });
-      res.json(newPostWithImage);
+      return res.json(newPostWithImage);
     }
 
     const newPostWithoutImage = new Post({
@@ -52,7 +58,7 @@ export const createPost = async (req, res) => {
 
     res.json(newPostWithoutImage);
   } catch (error) {
-    console.log(5);
+    // console.log(5);
     res.json({
       message:
         'Щось пішло не так в PostController createPost function ' +
