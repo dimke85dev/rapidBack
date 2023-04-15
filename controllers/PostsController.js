@@ -32,7 +32,7 @@ export const createPost = async (req, res) => {
         //нашли юзера, которому этот пост принадлежит и добавили в его массив постов
         $push: { posts: newPostWithImage },
       });
-      return res.json(newPostWithImage);
+      res.json(newPostWithImage);
     }
 
     const newPostWithoutImage = new Post({
