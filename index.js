@@ -29,7 +29,7 @@ const app = express();
 app.use(cors());
 app.use(express.json({ extended: true }));
 
-app.use(express.static('static'));
+app.use(express.static('tmp'));
 app.use(fileUpload({}));
 
 //Routes
