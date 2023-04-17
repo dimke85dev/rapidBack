@@ -20,7 +20,7 @@ export const createPost = async (req, res) => {
 
       const fileName = uuid.v4() + '.jpg';
       const filePath = path.resolve('tmp', fileName);
-      req.files.image.mv(filePath);
+      // req.files.image.mv(filePath);
 
       const newPostWithImage = new Post({
         username: user.username,
