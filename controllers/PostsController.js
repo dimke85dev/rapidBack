@@ -20,7 +20,7 @@ export const createPost = async (req, res) => {
 
       const fileName = uuid.v4() + '.jpg';
       const filePath = path.resolve('tmp', fileName);
-      // req.files.image.mv(filePath);
+      req.files.image.mv(filePath);
 
       const newPostWithImage = new Post({
         username: user.username,
@@ -81,6 +81,23 @@ export const getAllPost = async (req, res) => {
     res.json({
       message:
         'Щось пішло не так в PostController getAllPost function ' +
+        error.message,
+    });
+  }
+};
+
+export const getPostById = async (req, res) => {
+  try {
+    const post = await Post.findByIdAndUpdate(req.params.id, {
+      //find post in database
+      $inc: { views: 1 }, // increase the property on 1
+    });
+
+    res.json({ post });
+  } catch (error) {
+    res.json({
+      message:
+        'Щось пішло не так в PostController getAPostById function ' +
         error.message,
     });
   }
