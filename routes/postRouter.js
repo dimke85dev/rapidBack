@@ -7,6 +7,7 @@ import {
   getMyPosts,
   removePost,
   updatePost,
+  getPostComments,
 } from '../controllers/PostsController.js';
 
 const postRouter = new Router();
@@ -34,5 +35,9 @@ postRouter.delete('/:id', checkAuth, removePost);
 //Update Post
 //api/posts/:id
 postRouter.put('/:id', checkAuth, updatePost);
+
+//Get Post Comments
+//api/posts/comments/:id
+postRouter.get('/comments/:id', getPostComments);
 
 export default postRouter;

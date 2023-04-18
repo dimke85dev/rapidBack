@@ -1,5 +1,7 @@
 import Post from '../models/Post.js';
 import UserModel from '../models/UserModel.js';
+import Comment from '../models/Comment.js';
+
 import path, { dirname } from 'path';
 import * as uuid from 'uuid';
 // import * as path from 'path';
@@ -15,7 +17,7 @@ export const createPost = async (req, res) => {
     if (req.files) {
       const fileName = uuid.v4() + '.jpg';
       const filePath = path.resolve('tmp', fileName);
-      // req.files.image.mv(filePath);
+      req.files.image.mv(filePath);
 
       const newPostWithImage = new Post({
         username: user.username,
@@ -146,7 +148,7 @@ export const updatePost = async (req, res) => {
     if (req.files) {
       const fileName = uuid.v4() + '.jpg';
       const filePath = path.resolve('tmp', fileName);
-      // req.files.image.mv(filePath);
+      req.files.image.mv(filePath);
       post.imgUrl = fileName || '';
     }
 
@@ -160,6 +162,26 @@ export const updatePost = async (req, res) => {
     res.json({
       message:
         'Щось пішло не так в PostController removePost function ' +
+        error.message,
+    });
+  }
+};
+
+// Get Post Comments
+
+export const getPostComments = async (req, res) => {
+  try {
+    const post = await Post.findById(req.params.id).sort('-createdAt'); //находим все посты и сортируем по дате создания sort('createedAT')
+    const list = await Promise.all(
+      post.comments.map((comment) => {
+        return Comment.findById(comment);
+      })
+    );
+    res.json(list);
+  } catch (error) {
+    res.json({
+      message:
+        'Щось пішло не так в PostController getPostComments function ' +
         error.message,
     });
   }

@@ -3,11 +3,12 @@ import Post from '../models/Post.js';
 
 export const createComment = async (req, res) => {
   try {
-    const { postId, comment } = req.boby;
+    const { postId, comment } = req.body;
     if (!comment)
       return res.json({ message: 'Коментар не може бути порожнім' });
 
     const newComment = new Comment({ comment });
+
     await newComment.save();
 
     try {
@@ -19,6 +20,6 @@ export const createComment = async (req, res) => {
     }
     res.json(newComment);
   } catch (error) {
-    res.json({ message: 'Щось трапилось' });
+    res.json({ message: 'Щось трапилось' }, error);
   }
 };
