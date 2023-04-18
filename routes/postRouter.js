@@ -4,6 +4,9 @@ import {
   createPost,
   getAllPost,
   getPostById,
+  getMyPosts,
+  removePost,
+  updatePost,
 } from '../controllers/PostsController.js';
 
 const postRouter = new Router();
@@ -19,5 +22,17 @@ postRouter.get('/', getAllPost);
 //Get Post By Id
 //api/posts/:id
 postRouter.get('/:id', getPostById);
+
+//Get My Posts
+//api/posts/user/me
+postRouter.get('/user/me', checkAuth, getMyPosts);
+
+//Remove Post
+//api/posts/:id
+postRouter.delete('/:id', checkAuth, removePost);
+
+//Update Post
+//api/posts/:id
+postRouter.put('/:id', checkAuth, updatePost);
 
 export default postRouter;

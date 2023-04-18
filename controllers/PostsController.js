@@ -3,7 +3,7 @@ import UserModel from '../models/UserModel.js';
 import path, { dirname } from 'path';
 import * as uuid from 'uuid';
 // import * as path from 'path';
-import { fileURLToPath } from 'url';
+// import { fileURLToPath } from 'url';
 
 //Create Post
 
@@ -13,29 +13,25 @@ export const createPost = async (req, res) => {
     const user = await UserModel.findById(req.userID);
     // console.log(req.userID);
     if (req.files) {
-      // let fileName = Date.now().toString() + req.files.image.name; //формируем имя для изображения
-      // const __dirname = dirname(fileURLToPath(import.meta.url)); //создаем переменную с текущем местоположением, т.е. путь
-      // req.files.image.mv(path.join(__dirname, '..', 'uploads', fileName)); // переносим полученный на фронтеend  файл  в папку uploads, выходя через две точки из текущей папки, и именуем как fileName
-      // res.json(req.files.image);
-
       const fileName = uuid.v4() + '.jpg';
       const filePath = path.resolve('tmp', fileName);
-      req.files.image.mv(filePath);
+      // req.files.image.mv(filePath);
 
       const newPostWithImage = new Post({
         username: user.username,
         title,
         text,
         imgUrl: fileName,
-        author: req.userId,
+        author: req.userID,
       });
 
       // console.log(newPostWithImage);
 
       await newPostWithImage.save(); //создали пост
 
-      await UserModel.findByIdAndUpdate(req.userId, {
+      await UserModel.findByIdAndUpdate(req.userID, {
         //нашли юзера, которому этот пост принадлежит и добавили в его массив постов
+
         $push: { posts: newPostWithImage },
       });
       return res.json(newPostWithImage);
@@ -46,12 +42,12 @@ export const createPost = async (req, res) => {
       title,
       text,
       imgUrl: '',
-      author: req.userId,
+      author: req.userID,
     });
 
     newPostWithoutImage.save();
 
-    await UserModel.findByIdAndUpdate(req.userId, {
+    await UserModel.findByIdAndUpdate(req.userID, {
       //нашли юзера, которому этот пост принадлежит и добавили в его массив постов
       $push: { posts: newPostWithoutImage },
     });
@@ -85,7 +81,7 @@ export const getAllPost = async (req, res) => {
     });
   }
 };
-
+//Get Post by Id
 export const getPostById = async (req, res) => {
   try {
     const post = await Post.findByIdAndUpdate(req.params.id, {
@@ -93,11 +89,77 @@ export const getPostById = async (req, res) => {
       $inc: { views: 1 }, // increase the property on 1
     });
 
-    res.json({ post });
+    res.json(post);
   } catch (error) {
     res.json({
       message:
         'Щось пішло не так в PostController getAPostById function ' +
+        error.message,
+    });
+  }
+};
+//Get my Post by Id
+export const getMyPosts = async (req, res) => {
+  try {
+    const user = await UserModel.findById(req.userID);
+    const list = await Promise.all(
+      user.posts.map((post) => {
+        return Post.findById(post._id);
+      })
+    );
+
+    res.json(list);
+  } catch (error) {
+    res.json({
+      message:
+        'Щось пішло не так в PostController getMyPost function ' +
+        error.message,
+    });
+  }
+};
+
+//Remove Post
+export const removePost = async (req, res) => {
+  try {
+    const post = await Post.findByIdAndDelete(req.params.id);
+    if (!post) return res.json({ message: 'Такого поста не існує' });
+
+    await UserModel.findByIdAndUpdate(req.userID, {
+      $pull: { posts: req.params.id },
+    });
+    res.json({ message: 'Стаття була видалена' });
+  } catch (error) {
+    res.json({
+      message:
+        'Щось пішло не так в PostController removePost function ' +
+        error.message,
+    });
+  }
+};
+
+//Update Post
+export const updatePost = async (req, res) => {
+  try {
+    const { title, text, id } = req.body;
+    const post = await Post.findById(id);
+
+    if (req.files) {
+      const fileName = uuid.v4() + '.jpg';
+      const filePath = path.resolve('tmp', fileName);
+      // req.files.image.mv(filePath);
+      post.imgUrl = fileName || '';
+    }
+
+    post.title = title;
+    post.text = text;
+
+    await post.save();
+
+    res.json(post);
+  } catch (error) {
+    res.json({
+      message:
+        'Щось пішло не так в PostController removePost function ' +
         error.message,
     });
   }
