@@ -13,11 +13,10 @@ export const createPost = async (req, res) => {
   try {
     const { title, text } = req.body;
     const user = await UserModel.findById(req.userID);
-    // console.log(req.userID);
     if (req.files) {
       const fileName = uuid.v4() + '.jpg';
       const filePath = path.resolve('tmp', fileName);
-      req.files.image.mv(filePath);
+      // req.files.image.mv(filePath);
 
       const newPostWithImage = new Post({
         username: user.username,
@@ -148,7 +147,7 @@ export const updatePost = async (req, res) => {
     if (req.files) {
       const fileName = uuid.v4() + '.jpg';
       const filePath = path.resolve('tmp', fileName);
-      req.files.image.mv(filePath);
+      // req.files.image.mv(filePath);
       post.imgUrl = fileName || '';
     }
 
