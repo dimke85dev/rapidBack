@@ -8,7 +8,7 @@ import authRouter from './routes/authRouter.js';
 import postRouter from './routes/postRouter.js';
 import commentRouter from './routes/commentRoter.js';
 
-import multer from 'multer';
+import carRouter from './routes/carRouter.js';
 
 dotenv.config();
 
@@ -39,6 +39,7 @@ app.use('/api', carRepairRouter);
 app.use('/api/auth', authRouter);
 app.use('/api/posts', postRouter);
 app.use('/api/comments', commentRouter);
+app.use('/api/cars', carRouter);
 
 app.use((req, res, next) => {
   // Добавляем заголовки, которые нужны для всех запросов
