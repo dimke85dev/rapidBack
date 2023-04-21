@@ -7,7 +7,7 @@ export const createCar = async (req, res) => {
     const newCar = new CarsModel({
       name,
       year,
-      vinCode: vinCode.toLowerCase(),
+      vinCode,
     });
     await newCar.save();
 
@@ -26,19 +26,18 @@ export const createCar = async (req, res) => {
 export const getCar = async (req, res) => {
   const { vinCode } = req.body;
   try {
-    const carVin = await CarsModel.find({ vinCode: vinCode.toLowerCase() });
-    if (!carVin.length) {
+    const car = await CarsModel.find({ vinCode: vinCode.toLowerCase() });
+    if (!car.length) {
       return res.json({
         message: 'Авто з таким вінкодом відсутнє',
         messageType: 'err',
       });
     }
-    res.json({ car: carVin });
+    res.json({ car: car });
   } catch (error) {
     res.json({
       message:
-        'Щось пішло не так в PostController getAllPost function ' +
-        error.message,
+        'Щось пішло не так в PostController getCar function ' + error.message,
     });
   }
 };

@@ -138,7 +138,7 @@ class AuthController {
       const user = await UserModel.findById(req.userID);
       if (!user) {
         return res
-          .status(402)
+          .status(407)
           .json({ message: `${username}  не существует`, messageType: 'err' });
       }
       const token = jwt.sign(

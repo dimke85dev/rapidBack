@@ -1,6 +1,5 @@
 import express from 'express';
 import mongoose from 'mongoose';
-import carRepairRouter from './routes/carRapaireRuter.js';
 import fileUpload from 'express-fileupload';
 import dotenv from 'dotenv';
 import cors from 'cors';
@@ -35,7 +34,7 @@ app.use(express.static('tmp'));
 app.use(fileUpload({}));
 
 //Routes
-app.use('/api', carRepairRouter);
+// app.use('/api', carRepairRouter);
 app.use('/api/auth', authRouter);
 app.use('/api/posts', postRouter);
 app.use('/api/comments', commentRouter);
