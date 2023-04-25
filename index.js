@@ -6,8 +6,9 @@ import cors from 'cors';
 import authRouter from './routes/authRouter.js';
 import postRouter from './routes/postRouter.js';
 import commentRouter from './routes/commentRoter.js';
-
 import carRouter from './routes/carRouter.js';
+import carMainRepairRouter from './routes/carMainRapaireRouter.js';
+import carTypeRepairRouter from './routes/carTypeRapaireRouter.js';
 
 dotenv.config();
 
@@ -39,6 +40,8 @@ app.use('/api/auth', authRouter);
 app.use('/api/posts', postRouter);
 app.use('/api/comments', commentRouter);
 app.use('/api/cars', carRouter);
+app.use('/api/mainrepair', carMainRepairRouter);
+app.use('/api/typerepair', carTypeRepairRouter);
 
 app.use((req, res, next) => {
   // Добавляем заголовки, которые нужны для всех запросов

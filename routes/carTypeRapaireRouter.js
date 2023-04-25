@@ -2,13 +2,13 @@ import { Router } from 'express';
 import { checkAuth } from '../utils/checkAuth.js';
 import { createCar, getCar } from '../controllers/carController.js';
 
-const carRouter = new Router();
+const carTypeRepairRouter = new Router();
 
-//Add New Car
-carRouter.post('/newcar', checkAuth, createCar);
+//Add New Main Repair
+carTypeRepairRouter.post('/newtyperepair', checkAuth, createCar);
 //uodate car
 // carRouter.post('/updatecar', carController.login);
 // //Get car
-carRouter.post('/carvin', checkAuth, getCar);
+carTypeRepairRouter.get('/typerepair', checkAuth, getCar);
 
-export default carRouter;
+export default carTypeRepairRouter;
