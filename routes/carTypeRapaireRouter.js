@@ -1,14 +1,26 @@
 import { Router } from 'express';
 import { checkAuth } from '../utils/checkAuth.js';
-import { createCar, getCar } from '../controllers/carController.js';
+import {
+  createTypeRepair,
+  getTypeRepairById,
+  removeTypeRepair,
+  updateTypeRepair,
+} from '../controllers/CarTypeRepairController.js';
 
 const carTypeRepairRouter = new Router();
 
 //Add New Main Repair
-carTypeRepairRouter.post('/newtyperepair', checkAuth, createCar);
-//uodate car
-// carRouter.post('/updatecar', carController.login);
-// //Get car
-carTypeRepairRouter.get('/typerepair', checkAuth, getCar);
+carTypeRepairRouter.post('/', checkAuth, createTypeRepair);
+// //Get Post By Id
+// //api/Typerepair/:id
+carTypeRepairRouter.post('/gettype', getTypeRepairById);
+
+//Remove Type Repair
+//api/Typerepair/:id
+carTypeRepairRouter.delete('/:id', checkAuth, removeTypeRepair);
+
+//Update Post
+//api/Typerepair/:id
+carTypeRepairRouter.put('/:id', checkAuth, updateTypeRepair);
 
 export default carTypeRepairRouter;
