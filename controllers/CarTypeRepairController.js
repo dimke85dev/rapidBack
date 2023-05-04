@@ -3,10 +3,11 @@ import TypeRepairModel from '../models/TypeRepairModel.js';
 
 export const createTypeRepair = async (req, res) => {
   try {
-    const { nameTypeRepair, id } = req.body;
+    const { nameTypeRepair, id, price } = req.body;
 
     const newTypeRepair = new TypeRepairModel({
       nameTypeRepair,
+      price,
     });
     await newTypeRepair.save();
 
@@ -42,6 +43,22 @@ export const getTypeRepairById = async (req, res) => {
     res.json({
       message:
         'Щось пішло не так в typeRepairController getTypeRepairById function' +
+        error.message,
+    });
+  }
+};
+
+export const getAllTypeRepairs = async (req, res) => {
+  try {
+    const typeRepairs = await TypeRepairModel.find().sort();
+    if (!typeRepairs) {
+      return res.json({ message: 'Записи відсутні' });
+    }
+    res.json(typeRepairs);
+  } catch (error) {
+    res.json({
+      message:
+        'Щось пішло не так в CarMainRepairController getAllTypeRepair function ' +
         error.message,
     });
   }

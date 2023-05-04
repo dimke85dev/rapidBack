@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { checkAuth } from '../utils/checkAuth.js';
 import {
   createTypeRepair,
+  getAllTypeRepairs,
   getTypeRepairById,
   removeTypeRepair,
   updateTypeRepair,
@@ -14,6 +15,8 @@ carTypeRepairRouter.post('/', checkAuth, createTypeRepair);
 // //Get Post By Id
 // //api/Typerepair/:id
 carTypeRepairRouter.post('/gettype', getTypeRepairById);
+
+carTypeRepairRouter.get('/getalltype', getAllTypeRepairs);
 
 //Remove Type Repair
 //api/Typerepair/:id
