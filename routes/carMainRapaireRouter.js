@@ -16,7 +16,7 @@ carMainRepairRouter.post('/', checkAuth, createMainRepair);
 //uodate car
 // carRouter.post('/updatecar', carController.login);
 // //Get car
-carMainRepairRouter.get('/', checkAuth, getAllMainRepairs);
+carMainRepairRouter.get('/', getAllMainRepairs);
 
 // //Get Post By Id
 // //api/mainrepair/:id
