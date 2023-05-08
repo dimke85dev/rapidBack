@@ -157,5 +157,20 @@ class AuthController {
       res.json({ message: 'Нет доступа', messageType: 'err' });
     }
   }
+
+  async getUsers(req, res) {
+    try {
+      const users = await UserModel.find();
+
+      if (!users) {
+        return res
+          .status(402)
+          .json({ message: `${username}  не существует`, messageType: 'err' });
+      }
+      res.json(users);
+    } catch (error) {
+      res.json({ message: 'Нет доступа', messageType: 'err' });
+    }
+  }
 }
 export default new AuthController();

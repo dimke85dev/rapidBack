@@ -41,3 +41,21 @@ export const getCar = async (req, res) => {
     });
   }
 };
+
+export const getAllCars = async (req, res) => {
+  try {
+    const cars = await CarsModel.find();
+    if (!cars.length) {
+      return res.json({
+        message: 'Авто відсутні',
+        messageType: 'err',
+      });
+    }
+    res.json(cars);
+  } catch (error) {
+    res.json({
+      message:
+        'Щось пішло не так в PostController getCar function ' + error.message,
+    });
+  }
+};

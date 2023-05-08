@@ -10,5 +10,7 @@ authRouter.post('/register', AuthController.register);
 authRouter.post('/login', AuthController.login);
 //Get me
 authRouter.get('/me', checkAuth, AuthController.getMe);
+//Get All Users
+authRouter.get('/users', checkAuth, AuthController.getUsers);
 
 export default authRouter;
