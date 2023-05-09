@@ -42,6 +42,25 @@ export const getCar = async (req, res) => {
   }
 };
 
+export const getCarById = async (req, res) => {
+  const { id } = req.body;
+  try {
+    const car = await CarsModel.find({ _id: id });
+    if (!car.length) {
+      return res.json({
+        message: 'Авто з таким вінкодом відсутнє',
+        messageType: 'err',
+      });
+    }
+    res.json({ car: car[0] });
+  } catch (error) {
+    res.json({
+      message:
+        'Щось пішло не так в PostController getCar function ' + error.message,
+    });
+  }
+};
+
 export const getAllCars = async (req, res) => {
   try {
     const cars = await CarsModel.find();
