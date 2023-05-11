@@ -11,25 +11,13 @@ const UserSchema = new mongoose.Schema(
       type: String,
       require: true,
     },
-    cars: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'CarUser',
-      },
-    ],
     posts: [
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Post',
       },
     ],
-    group: {
-      type: String,
-      // require: true,
-    },
-    status: {
-      type: Number,
-    },
+    roles: [{ type: String, ref: 'Role' }],
   },
   { timestamps: true }
 );

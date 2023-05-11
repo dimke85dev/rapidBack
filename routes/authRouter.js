@@ -12,5 +12,7 @@ authRouter.post('/login', AuthController.login);
 authRouter.get('/me', checkAuth, AuthController.getMe);
 //Get All Users
 authRouter.get('/users', checkAuth, AuthController.getUsers);
+authRouter.put('/updateuser', checkAuth, AuthController.updateUser);
+authRouter.delete('/removeuser', checkAuth, AuthController.removeUser);
 
 export default authRouter;

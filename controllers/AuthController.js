@@ -1,7 +1,15 @@
 import UserModel from '../models/UserModel.js';
 import bcrypt from 'bcryptjs'; //сложность шифрования
 import jwt from 'jsonwebtoken'; // Токен для определения авторизации
+import RoleModel from '../models/RoleModel.js';
 
+const generateAccessToken = (id, roles) => {
+  const payload = {
+    id,
+    roles,
+  };
+  return jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '30d' });
+};
 class AuthController {
   //Registration
   async register(req, res) {
@@ -31,35 +39,46 @@ class AuthController {
           messageType: 'err',
         });
       }
+      // const roleUser = new RoleModel({ value: 'USER' });
+      // const roleAdmin = new RoleModel({ value: 'ADMIN' });
+      // const roleMaster = new RoleModel({ value: 'MASTER' });
+      // roleUser.save();
+      // roleAdmin.save();
+      // roleMaster.save();
 
       const salt = bcrypt.genSaltSync(10); //сложность пароля
 
       const hash = bcrypt.hashSync(password, salt); //хеширование пароля
 
+      const userRole = await RoleModel.findOne({ value: 'USER' }); //создаем роль
+
       const newUser = new UserModel({
         username: username.toLowerCase(),
         password: hash, //записываем вместо пароля уже хешированный пароль
-        group: 'user',
+        roles: [userRole.value],
       }); //создаем новый обьект Пользователя модели  который будет экземпляром UserModel
       //Создаем токен
-      const token = jwt.sign(
-        {
-          id: newUser._id,
-        },
-        process.env.JWT_SECRET,
-        { expiresIn: '30d' }
-      );
+
+      const token = generateAccessToken(newUser._id, newUser.roles);
+      // const token = jwt.sign(
+      //   {
+      //     id: newUser._id,
+      //   },
+      //   process.env.JWT_SECRET,
+      //   { expiresIn: '30d' }
+      // );
       ///////////////////
       newUser.save();
-      // await UserModel.create(newUser); //сохраняе нового пользователя в базу данных
       res.json({
         //отправляем на фронт обьект Пользователя и сообщение о успешной регистрации
         token,
         newUser,
+        roles: newUser.roles[0],
         message: `Реєстрація пройшла успішно`,
         messageType: 'ok',
       });
     } catch (error) {
+      console.log(error);
       res.json({
         message: 'Помилка при створенні користувача',
         messageType: 'err',
@@ -141,13 +160,16 @@ class AuthController {
           .status(402)
           .json({ message: `${username}  не существует`, messageType: 'err' });
       }
-      const token = jwt.sign(
-        {
-          id: user._id,
-        },
-        process.env.JWT_SECRET,
-        { expiresIn: '30d' }
-      );
+
+      const token = generateAccessToken(user._id, user.roles);
+
+      // const token = jwt.sign(
+      //   {
+      //     id: user._id,
+      //   },
+      //   process.env.JWT_SECRET,
+      //   { expiresIn: '30d' }
+      // );
 
       res.json({
         user,
@@ -170,6 +192,46 @@ class AuthController {
       res.json(users);
     } catch (error) {
       res.json({ message: 'Нет доступа', messageType: 'err' });
+    }
+  }
+
+  //Remove User
+  async removeUser(req, res) {
+    try {
+      const post = await UserModel.findByIdAndDelete(req.params.id);
+      if (!post) return res.json({ message: 'Такого поста не існує' });
+
+      await UserModel.findByIdAndUpdate(req.userID, {
+        $pull: { posts: req.params.id },
+      });
+      res.json({ message: 'Стаття була видалена' });
+    } catch (error) {
+      res.json({
+        message:
+          'Щось пішло не так в PostController removePost function ' +
+          error.message,
+      });
+    }
+  }
+
+  //Update User
+  async updateUser(req, res) {
+    try {
+      const { username, roles, id } = req.body;
+      const user = await UserModel.findById(id);
+
+      user.username = username;
+      user.roles = [roles];
+
+      await user.save();
+
+      res.json(user);
+    } catch (error) {
+      res.json({
+        message:
+          'Щось пішло не так в PostController removePost function ' +
+          error.message,
+      });
     }
   }
 }
