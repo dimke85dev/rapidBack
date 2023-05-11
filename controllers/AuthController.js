@@ -198,13 +198,11 @@ class AuthController {
   //Remove User
   async removeUser(req, res) {
     try {
-      const post = await UserModel.findByIdAndDelete(req.params.id);
-      if (!post) return res.json({ message: 'Такого поста не існує' });
+      const { id } = req.body;
 
-      await UserModel.findByIdAndUpdate(req.userID, {
-        $pull: { posts: req.params.id },
-      });
-      res.json({ message: 'Стаття була видалена' });
+      const user = await UserModel.findByIdAndDelete(id);
+      if (!user)
+        return res.json({ message: 'Такого користувача не існує', id });
     } catch (error) {
       res.json({
         message:
