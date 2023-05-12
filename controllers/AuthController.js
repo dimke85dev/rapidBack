@@ -14,7 +14,7 @@ class AuthController {
   //Registration
   async register(req, res) {
     try {
-      const { username, password } = req.body;
+      const { username, password, formRole } = req.body;
 
       const isUsed = await UserModel.findOne({
         username: username.toLowerCase(),
@@ -39,18 +39,11 @@ class AuthController {
           messageType: 'err',
         });
       }
-      // const roleUser = new RoleModel({ value: 'USER' });
-      // const roleAdmin = new RoleModel({ value: 'ADMIN' });
-      // const roleMaster = new RoleModel({ value: 'MASTER' });
-      // roleUser.save();
-      // roleAdmin.save();
-      // roleMaster.save();
 
       const salt = bcrypt.genSaltSync(10); //сложность пароля
 
       const hash = bcrypt.hashSync(password, salt); //хеширование пароля
-
-      const userRole = await RoleModel.findOne({ value: 'USER' }); //создаем роль
+      const userRole = await RoleModel.findOne({ value: formRole || 'USER' }); //создаем роль
 
       const newUser = new UserModel({
         username: username.toLowerCase(),
@@ -69,13 +62,16 @@ class AuthController {
       // );
       ///////////////////
       newUser.save();
+
+      // const updatedUser = await UserModel.find();
+
       res.json({
-        //отправляем на фронт обьект Пользователя и сообщение о успешной регистрации
         token,
         newUser,
         roles: newUser.roles[0],
         message: `Реєстрація пройшла успішно`,
         messageType: 'ok',
+        // updatedUser,
       });
     } catch (error) {
       console.log(error);
@@ -203,6 +199,8 @@ class AuthController {
       const user = await UserModel.findByIdAndDelete(id);
       if (!user)
         return res.json({ message: 'Такого користувача не існує', id });
+      const updatedUser = await UserModel.find();
+      res.json(updatedUser);
     } catch (error) {
       res.json({
         message:
