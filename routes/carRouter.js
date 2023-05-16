@@ -6,7 +6,10 @@ import {
   getAllCars,
   getCarById,
 } from '../controllers/carController.js';
-
+import {
+  createCarRepairs,
+  getCarRepairs,
+} from '../controllers/CarRapairsController.js';
 const carRouter = new Router();
 
 //Add New Car
@@ -18,5 +21,7 @@ carRouter.post('/carvin', checkAuth, getCar);
 carRouter.post('/carid', checkAuth, getCarById);
 
 carRouter.get('/allcars', checkAuth, getAllCars);
+carRouter.post('/addcarrepairs', checkAuth, createCarRepairs);
+carRouter.get('/carrepairs', checkAuth, getCarRepairs);
 
 export default carRouter;

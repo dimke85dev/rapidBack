@@ -18,6 +18,7 @@ const UserSchema = new mongoose.Schema(
       },
     ],
     roles: [{ type: String, ref: 'Role' }],
+    repairs: [{ type: mongoose.Schema.Types.ObjectId, ref: 'CarRepairModel' }],
   },
   { timestamps: true }
 );
