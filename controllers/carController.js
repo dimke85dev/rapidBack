@@ -33,7 +33,9 @@ export const getCar = async (req, res) => {
         messageType: 'err',
       });
     }
-    res.json({ car: car });
+
+    res.json(car);
+    // res.json({ car: car });
   } catch (error) {
     res.json({
       message:
@@ -52,7 +54,8 @@ export const getCarById = async (req, res) => {
         messageType: 'err',
       });
     }
-    res.json({ car: car[0] });
+    // res.json({ car: car[0] });
+    res.json(car);
   } catch (error) {
     res.json({
       message:

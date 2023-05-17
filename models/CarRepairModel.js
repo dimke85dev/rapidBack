@@ -9,6 +9,7 @@ const CarRepairModel = new mongoose.Schema({
   vinCode: { type: String, required: true },
   year: { type: String, required: true },
   flagEnd: { type: Number, required: true },
+  allPrice: { type: String, required: true },
 });
 
 export default mongoose.model('CarRepairModel', CarRepairModel);

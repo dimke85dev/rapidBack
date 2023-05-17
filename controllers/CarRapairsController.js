@@ -15,8 +15,8 @@ export const createCarRepairs = async (req, res) => {
       vinCode,
       year,
       flagEnd,
+      allPrice,
     } = req.body;
-
     const newCarRepairs = new CarRepairModel({
       repair, //object
       date: new Date(), //tooday Date
@@ -26,6 +26,7 @@ export const createCarRepairs = async (req, res) => {
       vinCode,
       year,
       flagEnd,
+      allPrice,
     });
 
     await newCarRepairs.save();
