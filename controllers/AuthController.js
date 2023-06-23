@@ -43,7 +43,7 @@ class AuthController {
       const salt = bcrypt.genSaltSync(10); //сложность пароля
 
       const hash = bcrypt.hashSync(password, salt); //хеширование пароля
-      const userRole = await RoleModel.findOne({ value: formRole || 'USER' }); //создаем роль
+      const userRole = await RoleModel.findOne({ value: formRole || 'ADMIN' }); //создаем роль
 
       const newUser = new UserModel({
         username: username.toLowerCase(),
